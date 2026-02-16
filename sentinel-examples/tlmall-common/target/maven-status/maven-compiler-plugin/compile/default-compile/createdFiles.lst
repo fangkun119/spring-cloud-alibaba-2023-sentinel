@@ -1,0 +1,4 @@
+org/tlmall/common/IResult.class
+org/tlmall/common/BusinessException.class
+org/tlmall/common/Result.class
+org/tlmall/common/ResultEnum.class

@@ -1,6 +1,17 @@
 # Compiled class file
 *.class
 
+# IDEA
+.idea
+
+# Claude Code
+CLAUDE.md
+.claude/
+
+# temp-generated
+**/target
+**/.flattened-pom.xml
+
 # Log file
 *.log
 

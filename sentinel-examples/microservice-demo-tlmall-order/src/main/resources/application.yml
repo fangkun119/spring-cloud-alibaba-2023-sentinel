@@ -1,0 +1,48 @@
+server:
+  port: 8060
+spring:
+  application:
+    name: tlmall-order-sentinel-demo
+  cloud:
+    nacos:
+      discovery:
+        server-addr: tlmall-nacos-server:8848
+        username: nacos
+        password: nacos
+    sentinel:
+      transport:
+        # 添加sentinel的控制台地址
+        dashboard: tlmall-sentinel-dashboard:8888
+        # 指定应用与Sentinel控制台交互的端口，应用会起一个HttpServer占用该端口
+        port: 8719
+      # 将 HTTP 方法添加到资源名前缀
+      http-method-specify: true
+      # 将其配置为 false 即可根据不同的 URL 进行链路限流
+      web-context-unify: false
+      # 从nacos配置中心拉取规则信息
+      datasource:
+        flow-rules: #流控规则
+          nacos:
+            server-addr: tlmall-nacos-server:8848
+            username: nacos
+            password: nacos
+            dataId: ${spring.application.name}-flow-rules
+            groupId: SENTINEL_GROUP   # 注意groupId对应Sentinel Dashboard中的定义
+            data-type: json
+            rule-type: flow
+  datasource:
+    url: jdbc:mysql://tlmall-mysql:3306/tlmall_order?useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    main:
+    allow-bean-definition-overriding: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+# 暴露actuator端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

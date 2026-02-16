@@ -1,0 +1,47 @@
+server:
+  port: 8050
+feign:
+  sentinel:
+    enabled: true  # 开启Sentinel 对 Feign 的支持
+spring:
+  application:
+    name: tlmall-user-sentinel-demo
+  cloud:
+    # Nacos注册中心
+    nacos:
+      discovery:
+        server-addr: tlmall-nacos-server:8848
+        username: nacos
+        password: nacos
+    # 启用RestTemplate Bean上面的@LoadBalanced注解
+    loadbalancer:
+      nacos:
+        enabled: true
+    openfeign:
+      client:
+        config:
+          tlmall-order-sentinel-demo:
+            loggerLevel: FULL
+            # 连接超时时间
+            connectTimeout: 3000
+            # 请求处理超时时间
+            readTimeout: 5000
+      httpclient: # feign client使用 Apache HttpClient5
+        hc5:
+          enabled: true
+    sentinel:
+      transport:
+        # 添加sentinel的控制台地址
+        dashboard: tlmall-sentinel-dashboard:8888
+        # 指定应用与Sentinel控制台交互的端口，应用会起一个HttpServer占用该端口
+        port: 8719
+# 暴露actuator端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+logging:
+  level:
+    com.tuling.mall.sentineldemo.feign: debug   # 打印openFegin日志
+    com.alibaba.cloud.nacos.client.NacosPropertySourceBuilder: debug
